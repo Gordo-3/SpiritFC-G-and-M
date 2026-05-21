@@ -1137,7 +1137,7 @@ async function loadData() {
 }
 
 function parseCSV(text) {
-  const lines = text.split('\n').filter(l=>l.trim());
+  const lines = text.replace(/^﻿/, '').split('\n').filter(l=>l.trim());
   if (!lines.length) return [];
   const headers = parseLine(lines[0]);
   return lines.slice(1).map(line=>{
@@ -2354,7 +2354,7 @@ function switchTab(id){
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('on',tabs[i]===id));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
   document.getElementById(`tab-${id}`).classList.add('on');
-  if(id==='squad') renderACWRCards();
+  if(id==='squad') renderSquadView();
 }
 
 // ── STATUS ────────────────────────────────────────────────────────────────
