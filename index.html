@@ -1992,7 +1992,7 @@ function sparkSVG(rows, phaseCol) {
   const dropped = hasHeightDrop(rawPts);
   const pts = capHeightDrop(rawPts);
   const col = phaseCol || '#FFE500';
-  const W=640, H=100, padL=32, padR=10, padT=32, padB=26;
+  const W=640, H=100, padL=32, padR=28, padT=32, padB=26;
   const innerW=W-padL-padR, innerH=H-padT-padB;
   const heights = pts.map(x=>x.h);
   const minH = Math.floor(Math.min(...heights)-1);
@@ -2176,44 +2176,36 @@ async function generateCoachPDF(data,squadName){
   const monitor  = data.filter(p=>p.phase==='Circum-PHV'&&(!p.velocityCmYr||p.velocityCmYr<=6)).sort((a,b)=>b.pah-a.pah);
   const normal   = data.filter(p=>p.phase!=='Circum-PHV').length;
 
+  const sorted=[...data].sort((a,b)=>a.team.localeCompare(b.team)||a.name.localeCompare(b.name));
+  const CARDS_PER_PAGE=10;
+  const cardPages=[];
+  for(let i=0;i<sorted.length;i+=CARDS_PER_PAGE) cardPages.push(sorted.slice(i,i+CARDS_PER_PAGE));
+  const totalPages=1+cardPages.length+1; // p1 (overview+table) + card pages + glossary
+
   const page1=`<div class="rpt-page">
     ${headerHTML('COACH REPORT · CONFIDENTIAL',label)}
     <div class="rpt-body">
-      <div class="rpt-hero">
+      <div style="margin-bottom:12px;">
         <div class="rpt-hero-eyebrow">Squad Maturation Overview</div>
-        <div class="rpt-hero-name">${label}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.02em;line-height:1;color:#111;margin:4px 0 5px;">${label}</div>
         <div class="rpt-hero-sub">${data.length} players &nbsp;·&nbsp; Khamis-Roche &nbsp;·&nbsp; ${NOW_STR} &nbsp;·&nbsp; Weight data excluded</div>
       </div>
-
-      <div class="rpt-stat-grid">
-        <div class="rpt-stat"><div class="rpt-stat-label">Total Players</div><div class="rpt-stat-val">${data.length}</div><div class="rpt-stat-note">tracked this period</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-label">High Risk</div><div class="rpt-stat-val" style="color:#e63946">${highRisk.length}</div><div class="rpt-stat-note">velocity &gt;6cm/yr in PHV</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-label">Monitor</div><div class="rpt-stat-val" style="color:#b09700">${monitor.length}</div><div class="rpt-stat-note">Circum-PHV, load aware</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-label">Normal</div><div class="rpt-stat-val" style="color:#22c55e">${normal}</div><div class="rpt-stat-note">Pre or Post-PHV</div></div>
+      <div class="rpt-stat-grid" style="margin-bottom:14px;">
+        <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Total Players</div><div class="rpt-stat-val" style="font-size:26px;">${data.length}</div><div class="rpt-stat-note">tracked this period</div></div>
+        <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">High Risk</div><div class="rpt-stat-val" style="font-size:26px;color:#e63946;">${highRisk.length}</div><div class="rpt-stat-note">velocity &gt;6cm/yr in PHV</div></div>
+        <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Monitor</div><div class="rpt-stat-val" style="font-size:26px;color:#b09700;">${monitor.length}</div><div class="rpt-stat-note">Circum-PHV, load aware</div></div>
+        <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Normal</div><div class="rpt-stat-val" style="font-size:26px;color:#22c55e;">${normal}</div><div class="rpt-stat-note">Pre or Post-PHV</div></div>
       </div>
-
-      ${footerHTML(1,4,label)}
-    </div>
-  </div>`;
-
-  // Page 2: full player table
-  const sorted=[...data].sort((a,b)=>a.team.localeCompare(b.team)||a.name.localeCompare(b.name));
-  const page2=`<div class="rpt-page">
-    ${headerHTML('COACH REPORT · CONFIDENTIAL',label)}
-    <div class="rpt-body">
-      <div class="rpt-page-head">
-        <div class="rpt-page-head-title">FULL SQUAD DATA</div>
-        <div class="rpt-page-head-sub">${sorted.length} players · sorted by squad then name · weight excluded</div>
-      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#111;padding-bottom:7px;margin-bottom:10px;border-bottom:1px solid #ddd;">FULL SQUAD DATA <span style="font-weight:400;font-size:7.5px;color:#bbb;letter-spacing:.08em;">&nbsp;·&nbsp; ${sorted.length} players · sorted by squad then name</span></div>
       <table class="rpt-coach-tbl">
         <thead><tr>
-          <th style="min-width:160px">Name</th>
-          <th style="min-width:80px">Last Tested</th>
-          <th style="min-width:72px">Velocity</th>
-          <th style="min-width:52px">PAH%</th>
-          <th style="min-width:80px">Phase</th>
-          <th style="min-width:60px">Z-Score</th>
-          <th style="min-width:78px">Flag</th>
+          <th style="min-width:130px">Name</th>
+          <th style="min-width:72px">Last Tested</th>
+          <th style="min-width:64px">Velocity</th>
+          <th style="min-width:44px">PAH%</th>
+          <th style="min-width:70px">Phase</th>
+          <th style="min-width:52px">Z-Score</th>
+          <th style="min-width:68px">Flag</th>
         </tr></thead>
         <tbody>${sorted.map(p=>{
           const fl=loadFlag(p);
@@ -2221,17 +2213,17 @@ async function generateCoachPDF(data,squadName){
           const flagCls=fl.color==='red'?'rflag-red':fl.color==='amber'?'rflag-amber':'rflag-green';
           const rowBg=p.phase==='Circum-PHV'?'background:#FFFDE7;':p.phase==='Pre-PHV'?'background:#F8FBFF;':'';
           return `<tr style="${rowBg}">
-            <td style="font-weight:600;font-size:10px;">${p.name}</td>
-            <td style="font-family:DM Mono,monospace;font-size:9px;color:#888;">${p.date||'—'}</td>
-            <td style="font-family:DM Mono,monospace;font-size:9px;color:#555;">${p.velocityCmYr!==null?p.velocityCmYr+' cm/yr':'—'}</td>
-            <td style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;">${p.pah!==null?p.pah.toFixed(1)+'%':'—'}</td>
-            <td><span class="rpt-phase-pill ${pillCls}">${p.phase.replace('-PHV','')}</span></td>
-            <td style="font-family:DM Mono,monospace;font-size:10px;">${p.zScore!==null?p.zScore.toFixed(2):'N/A'}</td>
-            <td><span class="rpt-flag-pill ${flagCls}">${fl.label}</span></td>
+            <td style="font-weight:600;font-size:9.5px;padding:4px 6px;">${p.name}</td>
+            <td style="font-family:DM Mono,monospace;font-size:8.5px;color:#888;padding:4px 6px;">${p.date||'—'}</td>
+            <td style="font-family:DM Mono,monospace;font-size:8.5px;color:#555;padding:4px 6px;">${p.velocityCmYr!==null?p.velocityCmYr+' cm/yr':'—'}</td>
+            <td style="font-family:DM Mono,monospace;font-size:9.5px;font-weight:700;padding:4px 6px;">${p.pah!==null?p.pah.toFixed(1)+'%':'—'}</td>
+            <td style="padding:4px 6px;"><span class="rpt-phase-pill ${pillCls}">${p.phase.replace('-PHV','')}</span></td>
+            <td style="font-family:DM Mono,monospace;font-size:9.5px;padding:4px 6px;">${p.zScore!==null?p.zScore.toFixed(2):'N/A'}</td>
+            <td style="padding:4px 6px;"><span class="rpt-flag-pill ${flagCls}">${fl.label}</span></td>
           </tr>`;
         }).join('')}</tbody>
       </table>
-      ${footerHTML(2,4,label)}
+      ${footerHTML(1,totalPages,label)}
     </div>
   </div>`;
 
@@ -2297,16 +2289,8 @@ async function generateCoachPDF(data,squadName){
     </div>`;
   }
 
-  // Chunk players into pages of 10 (2 cols x 5 rows)
-  const CARDS_PER_PAGE = 10;
-  const cardPages = [];
-  for (let i = 0; i < sorted.length; i += CARDS_PER_PAGE) {
-    cardPages.push(sorted.slice(i, i + CARDS_PER_PAGE));
-  }
-
-  const totalPages = 2 + cardPages.length + 1; // p1 + p2 + card pages + glossary
   const cardPageHTMLs = cardPages.map((chunk, ci) => {
-    const pageNum = 3 + ci;
+    const pageNum = 2 + ci;
     return `<div class="rpt-page">
       ${headerHTML('COACH REPORT · CONFIDENTIAL', label)}
       <div class="rpt-body">
@@ -2323,7 +2307,7 @@ async function generateCoachPDF(data,squadName){
   });
 
   const glossaryPage=definitionsPageHTML(totalPages, totalPages, 'COACH REPORT · '+label);
-  await renderAndSave([page1, page2, ...cardPageHTMLs, glossaryPage], `SpiritFC_Coach_${squadName}_${new Date().toISOString().slice(0,10)}.pdf`);
+  await renderAndSave([page1, ...cardPageHTMLs, glossaryPage], `SpiritFC_Coach_${squadName}_${new Date().toISOString().slice(0,10)}.pdf`);
 }
 
 function definitionsPageHTML(pageNum,total,reportLabel){
