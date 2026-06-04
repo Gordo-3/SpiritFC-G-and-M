@@ -2044,7 +2044,7 @@ function sparkSVG(rows, phaseCol) {
       </div>
     </div>` : '';
 
-  return `<svg viewBox="0 0 ${W} ${H+10}" style="width:${W}px;max-width:100%;height:${H+10}px;display:block;margin:8px auto 4px">${grid}${bars}${line}${dots}${warnTriangle}${xLabels}${yLabels}</svg>${dropWarning}`;
+  return `<svg viewBox="0 0 ${W} ${H+10}" style="width:100%;display:block;margin:8px 0 4px">${grid}${bars}${line}${dots}${warnTriangle}${xLabels}${yLabels}</svg>${dropWarning}`;
 }
 
 function pahTrackHTML(pah,lower90,upper90,lower50,upper50,predH){
