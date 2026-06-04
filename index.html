@@ -1073,7 +1073,7 @@ const DEFS = [
   {term:'Predicted Adult Height', tag:'metric', body:'The estimated final adult height using the Khamis-Roche method (1994), based on current height, weight, and biological parent heights. Weight is never displayed in any report.'},
   {term:'PHV — Peak Height Velocity', tag:'phase', body:'The period of fastest growth during adolescence — the growth spurt. Typically ages 11–14 in girls and 13–16 in boys, but varies considerably between individuals.'},
   {term:'Pre-PHV', tag:'phase', body:'Before the main growth spurt. PAH% below 88%. Growth is steady and coordination typically good. An ideal phase for skill and fundamental movement development.'},
-  {term:'Circum-PHV', tag:'phase', body:'In or around peak growth velocity. PAH% between 88–95%. Elevated injury risk and load sensitivity. Training loads must be monitored closely.'},
+  {term:'Circum-PHV', tag:'phase', body:'In or around peak growth velocity. PAH% between 88–95%. Training load is carefully managed to support healthy development during this window.'},
   {term:'Post-PHV', tag:'phase', body:'Main growth phase largely complete. PAH% above 95%. The body tolerates increased training loads better. A good phase for strength and conditioning.'},
   {term:'Maturity Z-Score', tag:'metric', body:'How early or late a player is maturing vs peers of the same age. A score of 0 is average. Negative = later maturer. Positive = earlier maturer. Not available for all players.'},
   {term:'Maturity Offset', tag:'metric', body:'Estimated years from Peak Height Velocity. Negative = still before PHV. Positive = past PHV. Derived from Z-Score. Used alongside PAH% for phase classification.'},
@@ -2072,7 +2072,7 @@ function pahTrackHTML(pah,lower90,upper90,lower50,upper50,predH){
 
 function phaseDesc(phase){
   if(phase==='Pre-PHV') return 'Before the main growth spurt. Growth is steady and coordination typically good.';
-  if(phase==='Circum-PHV') return 'Currently in peak growth velocity. Body is changing rapidly — load management is critical.';
+  if(phase==='Circum-PHV') return 'Currently in their main growth phase. This is a normal and expected part of development — we pay close attention to training load during this window.';
   return 'Main growth phase largely complete. Body better able to handle increased training loads.';
 }
 
@@ -2082,8 +2082,8 @@ function buildParentNarrative(p){
     {dot:'#f4a261',title:'Currently in a growth spurt',body:`${fn} is in the fastest growth phase of adolescence, growing approximately ${p.velocityCmYr!==null?p.velocityCmYr+' cm per year':'rapidly'}. This is completely normal and expected.`},
     {dot:'#f4a261',title:'Coordination may feel different',body:'Growth spurts can temporarily affect balance and coordination on the pitch. This will settle as the body adapts to its new proportions.'},
     {dot:'#e63946',title:'Sleep is especially important right now',body:'9+ hours per night is recommended during this window. Growth hormone is released during sleep and it supports recovery from training.'},
-    {dot:'#e63946',title:'Watch for joint discomfort',body:'Knee or heel pain is common during rapid growth (Osgood-Schlatter, Severs disease). If they mention persistent pain, please let coaching staff know immediately.'},
-    {dot:'#22c55e',title:'What we are doing about it',body:`We have adjusted ${fn}s training to emphasise movement quality over heavy loading. We are monitoring them closely through this window.`},
+    {dot:'#e63946',title:'Watch for joint discomfort',body:'Knee or heel pain is common during rapid growth (Osgood-Schlatter, Severs disease). If they mention persistent pain, please let us know.'},
+    {dot:'#22c55e',title:'Our approach',body:`We are monitoring ${fn} closely through this period and may speak to them about adjusting their training load if they are experiencing any growth related discomfort.`},
   ];
   if(p.phase==='Pre-PHV') return [
     {dot:'#3a86ff',title:'Still approaching their main growth spurt',body:`At ${p.pah!==null?p.pah.toFixed(1)+'%':'—'} of predicted adult height, ${fn} has not yet entered peak growth. This varies a lot between individuals and is completely normal.`},
@@ -2091,7 +2091,7 @@ function buildParentNarrative(p){
     {dot:'#22c55e',title:'Training is appropriate for their stage',body:'Load is managed carefully to match their developmental stage. We will monitor closely as they approach their growth spurt.'},
   ];
   return [
-    {dot:'#22c55e',title:'Main growth phase largely complete',body:`At ${p.pah!==null?p.pah.toFixed(1)+'%':'—'} of predicted adult height, ${fn}s body is maturing well and increasingly ready for structured training.`},
+    {dot:'#22c55e',title:'Main growth phase largely complete',body:`At ${p.pah!==null?p.pah.toFixed(1)+'%':'—'} of predicted adult height, ${fn}'s body is maturing well and increasingly ready for structured training.`},
     {dot:'#22c55e',title:'Strength and conditioning becoming more effective',body:'Post-PHV athletes respond better to strength work. Expect continued physical development over the next 12-18 months as they fill out.'},
     {dot:'#22c55e',title:'Coordination typically improves',body:'The coordination challenges that can occur during rapid growth generally resolve post-PHV. This is a great phase for athletic development.'},
   ];
@@ -2336,7 +2336,7 @@ function definitionsPageHTML(pageNum,total,reportLabel){
       </div>
       <div style="margin-top:20px;padding:12px 16px;background:#fafaf9;border:1px solid #e8e5e0;border-radius:4px;">
         <div style="font-family:DM Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:5px">Confidentiality Note</div>
-        <div style="font-size:10px;color:#555;line-height:1.65">Weight data is collected solely for calculating Predicted Adult Height via Khamis-Roche and is not displayed in any parent or coach report. All maturation data is confidential and for player welfare and load management purposes only.</div>
+        <div style="font-size:10px;color:#555;line-height:1.65">Weight data is collected solely for calculating Predicted Adult Height via Khamis-Roche and is not displayed in any parent or coach report. All maturation data is confidential and for player welfare and load management purposes only. Any questions or concerns, please contact Gordon Allan (Spirit FC, Head of ADNA).</div>
       </div>
       ${footerHTML(pageNum,total,reportLabel)}
     </div>
