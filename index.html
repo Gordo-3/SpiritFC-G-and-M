@@ -829,8 +829,8 @@ body { font-family: var(--font-b); background: var(--bg); color: var(--ink); min
         <span class="fs-arrow open" id="arr-phase">▾</span>
       </div>
       <div class="fs-body open" id="fb-phase">
-        <label class="ck-row"><input type="checkbox" value="Pre-PHV" checked onchange="applyFilters()"><label>Pre-PHV (&lt;85%)</label></label>
-        <label class="ck-row"><input type="checkbox" value="Circum-PHV" checked onchange="applyFilters()"><label>Circum-PHV (85–95%)</label></label>
+        <label class="ck-row"><input type="checkbox" value="Pre-PHV" checked onchange="applyFilters()"><label>Pre-PHV (&lt;88%)</label></label>
+        <label class="ck-row"><input type="checkbox" value="Circum-PHV" checked onchange="applyFilters()"><label>Circum-PHV (88–95%)</label></label>
         <label class="ck-row"><input type="checkbox" value="Post-PHV" checked onchange="applyFilters()"><label>Post-PHV (&gt;95%)</label></label>
       </div>
     </div>
@@ -840,15 +840,15 @@ body { font-family: var(--font-b); background: var(--bg); color: var(--ink); min
         <span class="fs-arrow open" id="arr-pah">▾</span>
       </div>
       <div class="fs-body open" id="fb-pah">
-        <label class="ck-row"><input type="checkbox" value="lt85" checked onchange="applyFilters()"><label>Below 85%</label></label>
-        <label class="ck-row"><input type="checkbox" value="85to95" checked onchange="applyFilters()"><label>85–95%</label></label>
+        <label class="ck-row"><input type="checkbox" value="lt85" checked onchange="applyFilters()"><label>Below 88%</label></label>
+        <label class="ck-row"><input type="checkbox" value="85to95" checked onchange="applyFilters()"><label>88–95%</label></label>
         <label class="ck-row"><input type="checkbox" value="gt95" checked onchange="applyFilters()"><label>Above 95%</label></label>
       </div>
     </div>
     <div style="padding:14px 16px;margin-top:auto;border-top:1px solid var(--borderl)">
       <div style="font-family:var(--font-m);font-size:10px;color:var(--mid);letter-spacing:.06em;line-height:1.7">
         Khamis-Roche (1994)<br>
-        Pre-PHV &lt;85% · Circum 85–95% · Post &gt;95%<br>
+        Pre-PHV &lt;88% · Circum 88–95% · Post &gt;95%<br>
         Weight not shown in any report
       </div>
     </div>
@@ -892,7 +892,7 @@ body { font-family: var(--font-b); background: var(--bg); color: var(--ink); min
       <div class="panel">
         <div class="panel-head">
           <div class="panel-title">PAH% BY AGE</div>
-          <div class="panel-sub">Each player's latest <span class="def-word">% of Predicted Adult Height<span class="def-tip">Percentage of Predicted Adult Height. Pre-PHV &lt;85% · Circum-PHV 85–95% · Post-PHV &gt;95%</span></span> · coloured by phase</div>
+          <div class="panel-sub">Each player's latest <span class="def-word">% of Predicted Adult Height<span class="def-tip">Percentage of Predicted Adult Height. Pre-PHV &lt;88% · Circum-PHV 88–95% · Post-PHV &gt;95%</span></span> · coloured by phase</div>
         </div>
         <div class="panel-body">
           <div style="height:220px;position:relative"><canvas id="pahScatter"></canvas></div>
@@ -1009,7 +1009,7 @@ body { font-family: var(--font-b); background: var(--bg); color: var(--ink); min
       <div class="panel">
         <div class="panel-head">
           <div class="panel-title">LOAD MANAGEMENT FLAGS</div>
-          <div class="panel-sub">Players in <span class="def-word">Circum-PHV<span class="def-tip">Currently in peak growth velocity — PAH% between 85–95%. Training loads must be monitored carefully.</span></span> window requiring load consideration · coaching staff only</div>
+          <div class="panel-sub">Players in <span class="def-word">Circum-PHV<span class="def-tip">Currently in peak growth velocity — PAH% between 88–95%. Training loads must be monitored carefully.</span></span> window requiring load consideration · coaching staff only</div>
         </div>
         <div class="panel-body" id="flagsBody"></div>
       </div>
@@ -1072,22 +1072,22 @@ const DEFS = [
   {term:'PAH%', tag:'metric', body:'Percentage of Predicted Adult Height. Indicates how far through their total growth a player currently is. Used to classify PHV phase.'},
   {term:'Predicted Adult Height', tag:'metric', body:'The estimated final adult height using the Khamis-Roche method (1994), based on current height, weight, and biological parent heights. Weight is never displayed in any report.'},
   {term:'PHV — Peak Height Velocity', tag:'phase', body:'The period of fastest growth during adolescence — the growth spurt. Typically ages 11–14 in girls and 13–16 in boys, but varies considerably between individuals.'},
-  {term:'Pre-PHV', tag:'phase', body:'Before the main growth spurt. PAH% below 85%. Growth is steady and coordination typically good. An ideal phase for skill and fundamental movement development.'},
-  {term:'Circum-PHV', tag:'phase', body:'In or around peak growth velocity. PAH% between 85–95%. Elevated injury risk and load sensitivity. Training loads must be monitored closely.'},
+  {term:'Pre-PHV', tag:'phase', body:'Before the main growth spurt. PAH% below 88%. Growth is steady and coordination typically good. An ideal phase for skill and fundamental movement development.'},
+  {term:'Circum-PHV', tag:'phase', body:'In or around peak growth velocity. PAH% between 88–95%. Elevated injury risk and load sensitivity. Training loads must be monitored closely.'},
   {term:'Post-PHV', tag:'phase', body:'Main growth phase largely complete. PAH% above 95%. The body tolerates increased training loads better. A good phase for strength and conditioning.'},
   {term:'Maturity Z-Score', tag:'metric', body:'How early or late a player is maturing vs peers of the same age. A score of 0 is average. Negative = later maturer. Positive = earlier maturer. Not available for all players.'},
   {term:'Maturity Offset', tag:'metric', body:'Estimated years from Peak Height Velocity. Negative = still before PHV. Positive = past PHV. Derived from Z-Score. Used alongside PAH% for phase classification.'},
-  {term:'Height Velocity', tag:'metric', body:'Rate of growth in cm per year, calculated from the two most recent measurements. Values above 6 cm/yr during Circum-PHV trigger a High Risk load flag.'},
+  {term:'Height Velocity', tag:'metric', body:'Rate of growth in cm per year, calculated from the two most recent measurements. Values above 7.2 cm/yr during Circum-PHV trigger a High Risk load flag.'},
   {term:'Khamis-Roche Method', tag:'method', body:'Validated method for predicting adult stature, published in Pediatrics (1994). Uses standing height, weight, and biological parent heights. One of the most widely used methods in youth sport.'},
   {term:'50% Confidence Interval', tag:'metric', body:"The range within which the player's true adult height is expected to fall 50% of the time. A narrower band indicates a more precise prediction."},
   {term:'90% Confidence Interval', tag:'metric', body:"The broader range within which the player's true adult height is expected to fall 90% of the time. Use this as the outer bounds of the prediction."},
 ];
 
 const KEY_ITEMS = [
-  {color:'#3a86ff', label:'Pre-PHV', desc:'Player is below 85% PAH. Before main growth spurt.'},
-  {color:'#FFE500', label:'Circum-PHV', desc:'Player is 85–95% PAH. In peak growth window — monitor load carefully.'},
+  {color:'#3a86ff', label:'Pre-PHV', desc:'Player is below 88% PAH. Before main growth spurt.'},
+  {color:'#FFE500', label:'Circum-PHV', desc:'Player is 88–95% PAH. In peak growth window — monitor load carefully.'},
   {color:'#22c55e', label:'Post-PHV', desc:'Player is above 95% PAH. Growth largely complete.'},
-  {color:'#e63946', label:'High Risk', desc:'Circum-PHV with velocity >6 cm/yr. Load reduction strongly recommended.'},
+  {color:'#e63946', label:'High Risk', desc:'Circum-PHV with velocity >7.2 cm/yr. Load reduction strongly recommended.'},
   {color:'#f4a261', label:'Monitor', desc:'Circum-PHV. Prioritise movement quality. Watch for growth plate complaints.'},
   {color:'#22c55e', label:'Normal', desc:'Pre or Post-PHV. Standard training load appropriate.'},
 ];
@@ -1219,7 +1219,7 @@ function buildPlayers() {
 
 function pahToPhase(p) {
   if(p===null) return 'Unknown';
-  if(p<85)    return 'Pre-PHV';
+  if(p<88)    return 'Pre-PHV';
   if(p<=95)   return 'Circum-PHV';
   return 'Post-PHV';
 }
@@ -1360,8 +1360,8 @@ function applyFilters() {
     if(!squads.includes(p.team)) return false;
     if(!phases.includes(p.phase)) return false;
     if(p.pah!==null){
-      if(p.pah<85&&!pahBands.includes('lt85')) return false;
-      if(p.pah>=85&&p.pah<=95&&!pahBands.includes('85to95')) return false;
+      if(p.pah<88&&!pahBands.includes('lt85')) return false;
+      if(p.pah>=88&&p.pah<=95&&!pahBands.includes('85to95')) return false;
       if(p.pah>95&&!pahBands.includes('gt95')) return false;
     }
     return true;
@@ -1517,7 +1517,7 @@ function renderPlayersTab() {
 
 function loadFlag(p) {
   if(p.phase==='Circum-PHV'){
-    if(p.velocityCmYr!==null&&p.velocityCmYr>6) return{color:'red',label:'High Risk'};
+    if(p.velocityCmYr!==null&&p.velocityCmYr>7.2) return{color:'red',label:'High Risk'};
     return{color:'amber',label:'Monitor'};
   }
   return{color:'green',label:'Normal'};
@@ -1740,7 +1740,7 @@ function toggleAllPlayers(show) {
 // ── FLAGS ─────────────────────────────────────────────────────────────────
 function renderFlags() {
   const circum=filtered.filter(p=>p.phase==='Circum-PHV').sort((a,b)=>(b.velocityCmYr||0)-(a.velocityCmYr||0));
-  const highV=filtered.filter(p=>p.velocityCmYr!==null&&p.velocityCmYr>6);
+  const highV=filtered.filter(p=>p.velocityCmYr!==null&&p.velocityCmYr>7.2);
   const flagsBody=document.getElementById('flagsBody');
 
   if(!circum.length&&!highV.length){
@@ -1748,7 +1748,7 @@ function renderFlags() {
   } else {
     flagsBody.innerHTML=[
       ...highV.map(p=>`<div class="flag-row flag-red"><div class="flag-icon">🔴</div><div class="flag-body"><div class="flag-name">${p.name} <span style="font-weight:400;font-size:11px;color:var(--mid)">${p.team}</span></div><div class="flag-why">High growth velocity ${p.velocityCmYr} cm/yr · Circum-PHV · Recommend load reduction</div></div><div style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--red)">${p.pah!==null?p.pah.toFixed(1)+'%':'—'}</div></div>`),
-      ...circum.filter(p=>!p.velocityCmYr||p.velocityCmYr<=6).map(p=>`<div class="flag-row flag-amber"><div class="flag-icon">🟡</div><div class="flag-body"><div class="flag-name">${p.name} <span style="font-weight:400;font-size:11px;color:var(--mid)">${p.team}</span></div><div class="flag-why">Circum-PHV · Monitor load · Prioritise movement quality</div></div><div style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--amber)">${p.pah!==null?p.pah.toFixed(1)+'%':'—'}</div></div>`),
+      ...circum.filter(p=>!p.velocityCmYr||p.velocityCmYr<=7.2).map(p=>`<div class="flag-row flag-amber"><div class="flag-icon">🟡</div><div class="flag-body"><div class="flag-name">${p.name} <span style="font-weight:400;font-size:11px;color:var(--mid)">${p.team}</span></div><div class="flag-why">Circum-PHV · Monitor load · Prioritise movement quality</div></div><div style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--amber)">${p.pah!==null?p.pah.toFixed(1)+'%':'—'}</div></div>`),
     ].join('');
   }
 
@@ -2052,19 +2052,19 @@ function pahTrackHTML(pah,lower90,upper90,lower50,upper50,predH){
   const mn=70,mx=105;
   const toP=v=>v!==null?Math.min(Math.max((v-mn)/(mx-mn)*100,0),100):null;
   const pahP=toP(pah);
-  const phaseC=pah<85?'#3a86ff':pah<=95?'#FFE500':'#22c55e';
+  const phaseC=pah<88?'#3a86ff':pah<=95?'#FFE500':'#22c55e';
   const l90=toP(lower90),u90=toP(upper90),l50=toP(lower50),u50=toP(upper50);
   return `<div style="margin:10px 0 6px;">
-    <div style="width:100%;height:16px;border-radius:8px;background:linear-gradient(to right,#3a86ff22 0%,#3a86ff22 33%,#FFE50033 33%,#FFE50033 66%,#22c55e22 66%,#22c55e22 100%);position:relative;overflow:visible;">
+    <div style="width:100%;height:16px;border-radius:8px;background:linear-gradient(to right,#3a86ff22 0%,#3a86ff22 51.4%,#FFE50033 51.4%,#FFE50033 71.4%,#22c55e22 71.4%,#22c55e22 100%);position:relative;overflow:visible;">
       ${l90!==null?`<div style="position:absolute;top:1px;left:${l90}%;width:${u90-l90}%;height:14px;background:#FFE50018;border:1px dashed #FFE50066;border-radius:6px;"></div>`:''}
       ${l50!==null?`<div style="position:absolute;top:3px;left:${l50}%;width:${u50-l50}%;height:10px;background:#FFE50044;border:1.5px solid #FFE500cc;border-radius:4px;"></div>`:''}
       <div style="position:absolute;top:-4px;left:${pahP}%;transform:translateX(-50%);width:5px;height:24px;background:${phaseC};border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.25);"></div>
     </div>
-    <div style="display:flex;justify-content:space-between;font-family:DM Mono,monospace;font-size:7.5px;color:#bbb;margin-top:6px;"><span>70%</span><span>85%</span><span>95%</span><span>105%</span></div>
+    <div style="display:flex;justify-content:space-between;font-family:DM Mono,monospace;font-size:7.5px;color:#bbb;margin-top:6px;"><span>70%</span><span>88%</span><span>95%</span><span>105%</span></div>
     <div style="display:flex;font-family:DM Mono,monospace;font-size:7.5px;margin-top:2px;">
-      <span style="width:33%;color:#3a86ff;font-weight:700">PRE-PHV</span>
-      <span style="width:33%;text-align:center;color:#b09700;font-weight:700">CIRCUM-PHV</span>
-      <span style="width:33%;text-align:right;color:#22c55e;font-weight:700">POST-PHV</span>
+      <span style="width:51.4%;color:#3a86ff;font-weight:700">PRE-PHV</span>
+      <span style="width:20%;text-align:center;color:#b09700;font-weight:700">CIRCUM-PHV</span>
+      <span style="width:28.6%;text-align:right;color:#22c55e;font-weight:700">POST-PHV</span>
     </div>
     ${predH?`<div style="font-family:DM Mono,monospace;font-size:8px;color:#999;margin-top:6px;">50% CI: ${lower50?lower50.toFixed(1):'—'} – ${upper50?upper50.toFixed(1):'—'} cm &nbsp;·&nbsp; 90% CI: ${lower90?lower90.toFixed(1):'—'} – ${upper90?upper90.toFixed(1):'—'} cm</div>`:''}
   </div>`;
@@ -2172,8 +2172,8 @@ async function generateCoachPDF(data,squadName){
   const avgPah=avg(data.map(p=>p.pah).filter(v=>v!==null));
   const flags=data.filter(p=>p.phase==='Circum-PHV').sort((a,b)=>(b.velocityCmYr||0)-(a.velocityCmYr||0));
 
-  const highRisk = data.filter(p=>p.phase==='Circum-PHV'&&p.velocityCmYr!==null&&p.velocityCmYr>6).sort((a,b)=>b.velocityCmYr-a.velocityCmYr);
-  const monitor  = data.filter(p=>p.phase==='Circum-PHV'&&(!p.velocityCmYr||p.velocityCmYr<=6)).sort((a,b)=>b.pah-a.pah);
+  const highRisk = data.filter(p=>p.phase==='Circum-PHV'&&p.velocityCmYr!==null&&p.velocityCmYr>7.2).sort((a,b)=>b.velocityCmYr-a.velocityCmYr);
+  const monitor  = data.filter(p=>p.phase==='Circum-PHV'&&(!p.velocityCmYr||p.velocityCmYr<=7.2)).sort((a,b)=>b.pah-a.pah);
   const normal   = data.filter(p=>p.phase!=='Circum-PHV').length;
 
   const sorted=[...data].sort((a,b)=>a.team.localeCompare(b.team)||a.name.localeCompare(b.name));
@@ -2192,7 +2192,7 @@ async function generateCoachPDF(data,squadName){
       </div>
       <div class="rpt-stat-grid" style="margin-bottom:14px;">
         <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Total Players</div><div class="rpt-stat-val" style="font-size:26px;">${data.length}</div><div class="rpt-stat-note">tracked this period</div></div>
-        <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">High Risk</div><div class="rpt-stat-val" style="font-size:26px;color:#e63946;">${highRisk.length}</div><div class="rpt-stat-note">velocity &gt;6cm/yr in PHV</div></div>
+        <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">High Risk</div><div class="rpt-stat-val" style="font-size:26px;color:#e63946;">${highRisk.length}</div><div class="rpt-stat-note">velocity &gt;7.2cm/yr in PHV</div></div>
         <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Monitor</div><div class="rpt-stat-val" style="font-size:26px;color:#b09700;">${monitor.length}</div><div class="rpt-stat-note">Circum-PHV, load aware</div></div>
         <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Normal</div><div class="rpt-stat-val" style="font-size:26px;color:#22c55e;">${normal}</div><div class="rpt-stat-note">Pre or Post-PHV</div></div>
       </div>
