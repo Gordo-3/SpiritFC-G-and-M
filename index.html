@@ -1503,7 +1503,6 @@ function renderPlayersTab() {
       <td class="name-cell">${p.name}${testTag}</td>
       <td><span style="font-size:11px;color:var(--mid)">${p.team}</span></td>
       <td style="font-family:var(--font-m);font-size:11px;${dateStyle}">${p.date||'—'}${days<999?' ('+days+'d)':''}</td>
-      <td style="font-family:var(--font-m);font-size:11px;color:var(--mid)">${p.date||'—'}</td>
       <td class="mono">${p.age!==null?p.age.toFixed(1):'—'}</td>
       <td class="mono">${p.height!==null?p.height.toFixed(1):'—'}</td>
       <td>${delta}</td><td>${vel}</td>
@@ -1973,15 +1972,13 @@ function footerHTML(page,total,name){
 }
 
 function hasHeightDrop(pts) {
-  // Check if latest height is lower than previous
   if (pts.length < 2) return false;
   const last = pts[pts.length-1].h;
   const prev = pts[pts.length-2].h;
-  return last < prev;
+  return last <= prev;
 }
 
 function capHeightDrop(pts) {
-  // If latest is lower than previous, cap it at previous height for display
   if (!hasHeightDrop(pts)) return pts;
   const capped = [...pts];
   capped[capped.length-1] = { ...capped[capped.length-1], h: capped[capped.length-2].h, capped: true };
@@ -1991,10 +1988,11 @@ function capHeightDrop(pts) {
 function sparkSVG(rows, phaseCol) {
   const rawPts = rows.map(r=>({h:parseNum(r[COL.standing]),d:r[COL.date]})).filter(x=>x.h!==null);
   if (rawPts.length < 2) return '<div style="font-family:DM Mono,monospace;font-size:9px;color:#999;padding:8px 0">Need at least 2 measurements for chart</div>';
+  const strictlyDropped = rawPts.length>=2 && rawPts[rawPts.length-1].h < rawPts[rawPts.length-2].h;
   const dropped = hasHeightDrop(rawPts);
   const pts = capHeightDrop(rawPts);
   const col = phaseCol || '#FFE500';
-  const W=706, H=100, padL=32, padR=10, padT=20, padB=26;
+  const W=640, H=100, padL=32, padR=10, padT=32, padB=26;
   const innerW=W-padL-padR, innerH=H-padT-padB;
   const heights = pts.map(x=>x.h);
   const minH = Math.floor(Math.min(...heights)-1);
@@ -2010,6 +2008,13 @@ function sparkSVG(rows, phaseCol) {
 
   const linePoints = pts.map((x,i)=>`${xScale(i)},${yScale(x.h)}`).join(' ');
   const line = pts.length>1 ? `<polyline fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="${linePoints}"/>` : '';
+
+  const lastIdx = pts.length-1;
+  const warnX = xScale(lastIdx), warnY = yScale(pts[lastIdx].h);
+  const warnTriangle = dropped
+    ? `<polygon points="${warnX},${warnY-28} ${warnX-7},${warnY-16} ${warnX+7},${warnY-16}" fill="#e63946"/>
+       <text x="${warnX}" y="${warnY-18}" text-anchor="middle" font-family="DM Mono,monospace" font-size="7.5" fill="#fff" font-weight="700">!</text>`
+    : '';
 
   const dots = pts.map((x,i)=>{
     const isLast = i===pts.length-1;
@@ -2028,15 +2033,18 @@ function sparkSVG(rows, phaseCol) {
   const grid = `<line x1="${padL}" y1="${padT}" x2="${W-padR}" y2="${padT}" stroke="#f5f5f5" stroke-width="1"/>
     <line x1="${padL}" y1="${padT+innerH}" x2="${W-padR}" y2="${padT+innerH}" stroke="#f5f5f5" stroke-width="1"/>`;
 
+  const warningDetail = strictlyDropped
+    ? `the latest recorded height (${rawPts[rawPts.length-1].h.toFixed(1)} cm) is slightly lower than the previous measurement (${rawPts[rawPts.length-2].h.toFixed(1)} cm). This is likely a measurement variation rather than an actual change. We will recheck at the next testing session. The chart shows the previous height to avoid a misleading downward line (marked with *).`
+    : `no height increase was recorded since the previous measurement (${rawPts[rawPts.length-2].h.toFixed(1)} cm). This may be a measurement variation. We will recheck at the next testing session. The chart shows the previous height (marked with *).`;
   const dropWarning = dropped ? `
     <div style="margin-top:8px;padding:8px 12px;background:#FFF9F0;border:1px solid #f4a26144;border-radius:4px;display:flex;align-items:flex-start;gap:8px;">
       <span style="font-size:14px;flex-shrink:0">⚠️</span>
       <div style="font-size:10px;color:#555;line-height:1.5;">
-        <strong style="color:#c87000">Measurement check needed</strong> — the latest recorded height (${rawPts[rawPts.length-1].h.toFixed(1)} cm) is slightly lower than the previous measurement (${rawPts[rawPts.length-2].h.toFixed(1)} cm). This is likely a measurement variation rather than an actual change. We will recheck at the next testing session. The chart shows the previous height to avoid a misleading downward line (marked with *).
+        <strong style="color:#c87000">Measurement check needed</strong> — ${warningDetail}
       </div>
     </div>` : '';
 
-  return `<svg viewBox="0 0 ${W} ${H+10}" style="width:100%;height:${H+10}px;display:block;margin:8px 0 4px">${grid}${bars}${line}${dots}${xLabels}${yLabels}</svg>${dropWarning}`;
+  return `<svg viewBox="0 0 ${W} ${H+10}" style="width:${W}px;max-width:100%;height:${H+10}px;display:block;margin:8px auto 4px">${grid}${bars}${line}${dots}${warnTriangle}${xLabels}${yLabels}</svg>${dropWarning}`;
 }
 
 function pahTrackHTML(pah,lower90,upper90,lower50,upper50,predH){
@@ -2182,33 +2190,6 @@ async function generateCoachPDF(data,squadName){
         <div class="rpt-stat"><div class="rpt-stat-label">High Risk</div><div class="rpt-stat-val" style="color:#e63946">${highRisk.length}</div><div class="rpt-stat-note">velocity &gt;6cm/yr in PHV</div></div>
         <div class="rpt-stat"><div class="rpt-stat-label">Monitor</div><div class="rpt-stat-val" style="color:#b09700">${monitor.length}</div><div class="rpt-stat-note">Circum-PHV, load aware</div></div>
         <div class="rpt-stat"><div class="rpt-stat-label">Normal</div><div class="rpt-stat-val" style="color:#22c55e">${normal}</div><div class="rpt-stat-note">Pre or Post-PHV</div></div>
-      </div>
-
-      <div class="rpt-section">
-        <div class="rpt-section-head">LOAD FLAGS</div>
-        <div style="display:grid;grid-template-columns:8px 1fr 52px 80px 110px;gap:0;margin-bottom:4px;padding:0 10px 6px;border-bottom:1px solid #eee;">
-          <div></div>
-          <div style="font-family:DM Mono,monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:#bbb">Player</div>
-          <div style="font-family:DM Mono,monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:#bbb;text-align:right">PAH%</div>
-          <div style="font-family:DM Mono,monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:#bbb;text-align:right">Velocity</div>
-          <div style="font-family:DM Mono,monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:#bbb;text-align:right">Action</div>
-        </div>
-        ${[...highRisk,...monitor].map(p=>{
-          const isHigh=p.velocityCmYr!==null&&p.velocityCmYr>6;
-          const fc=isHigh?'#e63946':'#f4a261';
-          const actionText=isHigh?'Reduce load':'Monitor';
-          const rowBg=isHigh?'#FFF5F5':'#FFFBF0';
-          return `<div style="display:grid;grid-template-columns:8px 1fr 52px 80px 110px;gap:0;align-items:center;padding:7px 10px;margin-bottom:3px;background:${rowBg};border-radius:4px;border-left:3px solid ${fc};">
-            <div></div>
-            <div>
-              <div style="font-size:10.5px;font-weight:700;color:#111">${p.name}</div>
-            </div>
-            <div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;color:#333">${p.pah!==null?p.pah.toFixed(1)+'%':'—'}</div>
-            <div style="font-family:DM Mono,monospace;font-size:10px;text-align:right;color:${fc}">${p.velocityCmYr!==null?p.velocityCmYr+' cm/yr':'—'}</div>
-            <div style="text-align:right"><span style="display:inline-block;padding:3px 8px;background:${fc};color:#fff;border-radius:10px;font-family:DM Mono,monospace;font-size:8px;font-weight:700;letter-spacing:.06em">${actionText}</span></div>
-          </div>`;
-        }).join('')}
-        ${(!highRisk.length&&!monitor.length)?'<div style="font-size:11px;color:#999;padding:8px 0">No players currently flagged for load management.</div>':''}
       </div>
 
       ${footerHTML(1,4,label)}
