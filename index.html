@@ -2082,8 +2082,8 @@ function buildParentNarrative(p){
     {dot:'#f4a261',title:'Currently in a growth spurt',body:`${fn} is in the fastest growth phase of adolescence, growing approximately ${p.velocityCmYr!==null?p.velocityCmYr+' cm per year':'rapidly'}. This is completely normal and expected.`},
     {dot:'#f4a261',title:'Coordination may feel different',body:'Growth spurts can temporarily affect balance and coordination on the pitch. This will settle as the body adapts to its new proportions.'},
     {dot:'#e63946',title:'Sleep is especially important right now',body:'9+ hours per night is recommended during this window. Growth hormone is released during sleep and it supports recovery from training.'},
-    {dot:'#e63946',title:'Watch for joint discomfort',body:'Knee or heel pain is common during rapid growth (Osgood-Schlatter, Severs disease). If they mention persistent pain, please let us know.'},
-    {dot:'#22c55e',title:'Our approach',body:`We are monitoring ${fn} closely through this period and may speak to them about adjusting their training load if they are experiencing any growth related discomfort.`},
+    {dot:'#e63946',title:'Watch for growing discomfort',body:`Knee, hip, or back discomfort is common during rapid growth (Osgood-Schlatter, Severs disease). If ${fn} mentions persistent discomfort, please speak to their coach or an ADNA staff member about modifications.`},
+    {dot:'#22c55e',title:'Our approach',body:`We are monitoring ${fn} closely through this period. If they are experiencing growing discomfort, modifications typically involve a 30% reduction in training volume until symptoms subside — allowing us to balance growth discomfort while still providing game and training opportunities.`},
   ];
   if(p.phase==='Pre-PHV') return [
     {dot:'#3a86ff',title:'Still approaching their main growth spurt',body:`At ${p.pah!==null?p.pah.toFixed(1)+'%':'—'} of predicted adult height, ${fn} has not yet entered peak growth. This varies a lot between individuals and is completely normal.`},
@@ -2195,6 +2195,10 @@ async function generateCoachPDF(data,squadName){
         <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">High Risk</div><div class="rpt-stat-val" style="font-size:26px;color:#e63946;">${highRisk.length}</div><div class="rpt-stat-note">velocity &gt;7.2cm/yr in PHV</div></div>
         <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Monitor</div><div class="rpt-stat-val" style="font-size:26px;color:#b09700;">${monitor.length}</div><div class="rpt-stat-note">Circum-PHV, load aware</div></div>
         <div class="rpt-stat" style="padding:10px 14px;"><div class="rpt-stat-label">Normal</div><div class="rpt-stat-val" style="font-size:26px;color:#22c55e;">${normal}</div><div class="rpt-stat-note">Pre or Post-PHV</div></div>
+      </div>
+      <div style="background:#FFFDE7;border:1px solid #FFE500;border-radius:6px;padding:10px 12px;margin-bottom:14px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#b09700;margin-bottom:5px;">LOAD MODIFICATION GUIDANCE</div>
+        <div style="font-size:9.5px;color:#444;line-height:1.6;">If a player is experiencing growing discomfort (knee, hip, or back), their ADNA Coach will work with them to manage their load. Typically this means reducing weekly training volume by approximately <strong>30%</strong> until symptoms subside. Players continue to be available for games and training throughout this period where appropriate.</div>
       </div>
       <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#111;padding-bottom:7px;margin-bottom:10px;border-bottom:1px solid #ddd;">FULL SQUAD DATA <span style="font-weight:400;font-size:7.5px;color:#bbb;letter-spacing:.08em;">&nbsp;·&nbsp; ${sorted.length} players · sorted by squad then name</span></div>
       <table class="rpt-coach-tbl">
