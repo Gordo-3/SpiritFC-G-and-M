@@ -1066,6 +1066,7 @@ const COL = {
   pah:'%PAH', lower50:'Lower 50% Bound', upper50:'Upper 50% Bound',
   lower90:'Lower 90% Bound', upper90:'Upper 90% Bound',
   zScore:'Maturity Z-Score', predAdult:'Predicted Adult Height',
+  refMean:'Ref Mean',
 };
 
 const DEFS = [
@@ -1185,7 +1186,8 @@ function buildPlayers() {
     const prev   = rows.length>1 ? rows[rows.length-2] : null;
 
     const pah    = parseNum(latest[COL.pah]);
-    const zScore = parseZS(latest[COL.zScore]);
+    const gender = (latest[COL.refMean]||'').trim() ? 'M' : 'F';
+    const zScore = gender==='M' ? parseZS(latest[COL.zScore]) : null;
     const height = parseNum(latest[COL.standing]);
     const age    = parseNum(latest[COL.age]);
     const predH  = parseNum(latest[COL.predAdult]);
@@ -1207,7 +1209,7 @@ function buildPlayers() {
     const matOffset = zScore!==null?+(zScore*0.85).toFixed(2):null;
 
     return {
-      name, rows, team, rawTeam,
+      name, rows, team, rawTeam, gender,
       date:latest[COL.date]||'', dob:latest[COL.dob]||'',
       age, height, pah, zScore, predH, heightDelta, velocityCmYr,
       phase, matOffset,
@@ -2208,7 +2210,7 @@ async function generateCoachPDF(data,squadName){
           <th style="min-width:64px">Velocity</th>
           <th style="min-width:44px">PAH%</th>
           <th style="min-width:70px">Phase</th>
-          <th style="min-width:52px">Z-Score</th>
+          <th style="min-width:52px">Z-Score <span style="font-weight:400;opacity:.6">(M)</span></th>
           <th style="min-width:68px">Flag</th>
         </tr></thead>
         <tbody>${sorted.map(p=>{
@@ -2282,7 +2284,7 @@ async function generateCoachPDF(data,squadName){
         <div style="display:flex;gap:6px;align-items:center">
           <div style="text-align:right">
             <div style="font-family:DM Mono,monospace;font-size:11px;font-weight:700;color:${phaseDotDisplay}">${p.pah!==null?p.pah.toFixed(1)+'%':'—'}</div>
-            <div style="font-family:DM Mono,monospace;font-size:8px;color:#bbb">${p.zScore!==null?'Z: '+p.zScore.toFixed(2):'Z: N/A'}</div>
+            <div style="font-family:DM Mono,monospace;font-size:8px;color:#bbb">${p.zScore!==null?'Z: '+p.zScore.toFixed(2):p.gender==='F'?'Z: —':'Z: N/A'}</div>
           </div>
           <span class="rpt-flag-pill ${flagCls}" style="font-size:7px">${fl.label}</span>
         </div>
